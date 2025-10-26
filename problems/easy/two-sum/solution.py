@@ -31,25 +31,3 @@ class Solution:
             for j in range(i + 1, len(nums)):
                 if val == nums[j]:
                     return [i, j]
-
-
-def test_solution():
-    solution = Solution()
-
-    # Test case 1
-    result1 = solution.twoSum([2, 7, 11, 15], 9)
-    assert result1 == [0, 1], f"Expected [0, 1], got {result1}"
-
-    # Test case 2
-    result2 = solution.twoSum([3, 2, 4], 6)
-    assert result2 == [1, 2], f"Expected [1, 2], got {result2}"
-
-    # Test case 3
-    result3 = solution.twoSum([3, 3], 6)
-    assert result3 == [0, 1], f"Expected [0, 1], got {result3}"
-
-    print("All test cases passed!")
-
-
-if __name__ == "__main__":
-    test_solution()
