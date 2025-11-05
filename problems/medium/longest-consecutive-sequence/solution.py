@@ -9,15 +9,19 @@ from typing import List
 
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
-        if nums == []:
-            return 0
-        seq = {}
-        for num in nums:
-            if num in seq:
-                continue
-            lst = seq.get(num - 1, []) + [num] + seq.get(num + 1, [])
-            for n in lst:
-                seq[n] = lst
-            print(seq, "\n")
+        nums_set = set(nums)
+        longest_seq = 0
+        while nums_set:
+            num = nums_set.pop()
+            seq, prev, nxt = 1, num - 1, num + 1
+            while prev in nums_set:
+                seq += 1
+                nums_set.remove(prev)
+                prev -= 1
+            while nxt in nums_set:
+                seq += 1
+                nums_set.remove(nxt)
+                nxt += 1
+            longest_seq = max(longest_seq, seq)
 
-        return max(len(lst) for lst in seq.values())
+        return longest_seq
