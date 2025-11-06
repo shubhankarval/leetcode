@@ -12,16 +12,10 @@ class Solution:
     def isPalindrome(self, s: str) -> bool:
         i, j = 0, len(s) - 1
         while i < j:
-            while i < len(s):
-                if self.isValidChar(s[i]):
-                    break
+            while i < j and not self.isValidChar(s[i]):
                 i += 1
-            while j > 0:
-                if self.isValidChar(s[j]):
-                    break
+            while i < j and not self.isValidChar(s[j]):
                 j -= 1
-            if i > len(s) - 1 or j < 0:
-                break
 
             if s[i].lower() != s[j].lower():
                 return False
