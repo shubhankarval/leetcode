@@ -11,14 +11,15 @@ Space Complexity: O(n)
 class Solution:
     def isValid(self, s: str) -> bool:
         stack = []
+        closeToOpen = {")": "(", "]": "[", "}": "{"}
+
         for bracket in s:
-            if bracket in ["(", "[", "{"]:
-                stack.append(bracket)
-            elif len(stack):
-                last_open_bracket = stack.pop()
-                if ord(last_open_bracket) // 10 != ord(bracket) // 10:
+            if bracket in closeToOpen:
+                if stack and stack[-1] == closeToOpen[bracket]:
+                    stack.pop()
+                else:
                     return False
             else:
-                return False
+                stack.append(bracket)
 
         return len(stack) == 0
