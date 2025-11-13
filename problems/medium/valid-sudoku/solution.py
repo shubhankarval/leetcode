@@ -9,31 +9,22 @@ from typing import List
 
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        for row in board:
-            s = set()
-            for val in row:
-                if self.containsDuplicate(val, s):
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+        boxes = [set() for _ in range(9)]
+
+        for r in range(9):
+            for c in range(9):
+                val = board[r][c]
+                if val == ".":
+                    continue
+
+                b = (r // 3) * 3 + (c // 3)
+                if val in rows[r] or val in cols[c] or val in boxes[b]:
                     return False
 
-        for col in range(9):
-            s = set()
-            for row in range(9):
-                if self.containsDuplicate(board[row][col], s):
-                    return False
-
-        for row in range(0, 9, 3):
-            for col in range(0, 9, 3):
-                s = set()
-                for sub_row in range(row, row + 3):
-                    for sub_col in range(col, col + 3):
-                        if self.containsDuplicate(board[sub_row][sub_col], s):
-                            return False
+                rows[r].add(val)
+                cols[c].add(val)
+                boxes[b].add(val)
 
         return True
-
-    def containsDuplicate(self, val: str, s: set) -> bool:
-        if val in s:
-            return True
-        if val != ".":
-            s.add(val)
-        return False
