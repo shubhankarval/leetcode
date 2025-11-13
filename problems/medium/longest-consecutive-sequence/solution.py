@@ -2,6 +2,9 @@
 Problem: Longest Consecutive Sequence
 Difficulty: Medium
 URL: https://leetcode.com/problems/longest-consecutive-sequence/
+
+Time Complexity: O(n)
+Space Complexity: O(n)
 """
 
 from typing import List

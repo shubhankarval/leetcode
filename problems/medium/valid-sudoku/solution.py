@@ -2,6 +2,9 @@
 Problem: Valid Sudoku
 Difficulty: Medium
 URL: https://leetcode.com/problems/valid-sudoku/
+
+Time Complexity: O(n²)
+Space Complexity: O(n²)
 """
 
 from typing import List
