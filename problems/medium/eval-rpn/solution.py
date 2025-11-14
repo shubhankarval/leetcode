@@ -13,13 +13,19 @@ import math
 
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        res = []
+        stack = []
         for t in tokens:
             if t in "+-*/":
-                val = int(eval(res[-2] + t + res[-1]))
-                res[-2] = str(val)
-                res.pop()
+                a, b = stack.pop(), stack.pop()
+                if t == "+":
+                    stack.append(a + b)
+                elif t == "-":
+                    stack.append(b - a)
+                elif t == "*":
+                    stack.append(b * a)
+                else:
+                    stack.append(int(b / a))
             else:
-                res.append(t)
+                stack.append(int(t))
 
-        return int(res[-1])
+        return stack[0]
