@@ -2,7 +2,6 @@
 Problem: Linked List Cycle Detection
 Difficulty: Easy
 URL: https://leetcode.com/problems/linked-list-cycle/
--10⁵ <= Node.val <= 10⁵
 
 Time Complexity: O(n)
 Space Complexity: O(1)
@@ -14,18 +13,13 @@ Space Complexity: O(1)
 #         self.val = val
 #         self.next = next
 
-"""
-Intuition:
-change each val to a digit
-if that digit is visited again return true, else false
-"""
-
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        while head:
-            if head.val == float("inf"):
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
                 return True
-            head.val = float("inf")
-            head = head.next
         return False
