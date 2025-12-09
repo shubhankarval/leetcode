@@ -7,10 +7,13 @@ Time Complexity: O(1) for get and put operations
 Space Complexity: O(n) where n is the capacity of the LRU cache
 """
 
+from collections import defaultdict
 
+
+# Doubly Linked List
 class Node:
-    def __init__(self, val=0, prev=None, next=None):
-        self.val = val
+    def __init__(self, key, prev=None, next=None):
+        self.key = key
         self.prev = prev
         self.next = next
 
@@ -19,53 +22,46 @@ class LRUCache:
 
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.keyVal = {}
-        self.keyNode = {}
-        self.head = self.tail = None
+        self.cache = defaultdict(list)  # key -> [value, node]
+        self.head = Node("head")
+        self.tail = Node("tail", self.head)
+        self.head.next = self.tail
 
     def get(self, key: int) -> int:
-        if key in self.keyVal:
+        # update list
+        if key in self.cache:
             self.updateNode(key)
-            return self.keyVal[key]
+            return self.cache[key][0]
         return -1
 
     def put(self, key: int, value: int) -> None:
-        if key in self.keyVal:
+        # add to list or update list, delete from list if breaching capacity
+        if key in self.cache:
+            self.cache[key][0] = value
             self.updateNode(key)
         else:
-            if len(self.keyVal) + 1 > self.capacity:
-                del self.keyVal[self.head.val]
-                self.deleteNode()
-            self.addNode(key)
-        self.keyVal[key] = value
+            self.cache[key].append(value)
+            if len(self.cache) > self.capacity:
+                self.deleteHead()
+            self.addTail(key)
+            self.cache[key].append(self.tail.prev)
 
-    def addNode(self, key: int):
-        # Add new tail node
-        if not self.head:
-            self.head = self.tail = Node(key)
-        else:
-            self.tail.next = Node(key, self.tail)
-            self.tail = self.tail.next
-        self.keyNode[key] = self.tail
+    def addTail(self, key: int):
+        node = Node(key, self.tail.prev, self.tail)
+        self.tail.prev.next = self.tail.prev = node
 
     def updateNode(self, key: int):
-        # delete curr node & add new tail node
-        node = self.keyNode[key]
-        if node == self.head:
-            self.deleteNode()
-        elif node == self.tail:
-            self.tail.prev.next = None
-            self.tail = self.tail.prev
-        else:
-            node.prev.next = node.next
-            node.next.prev = node.prev
-        self.addNode(key)
+        # delete node
+        node = self.cache[key][1]
+        node.prev.next = node.next
+        node.next.prev = node.prev
 
-    def deleteNode(self):
-        # Delete head node
-        key = self.head.val
-        del self.keyNode[key]
-        if self.head.next:
-            self.head = self.head.next
-        else:
-            self.head = self.tail = None
+        # add to tail
+        self.addTail(key)
+        self.cache[key][1] = self.tail.prev
+
+    def deleteHead(self):
+        del self.cache[self.head.next.key]
+        node = self.head.next.next
+        self.head.next = node
+        node.prev = self.head
