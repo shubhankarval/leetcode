@@ -36,7 +36,7 @@ class Solution:
             if l != k:
                 break
 
-            prevStart, newStart = prev, end.next
+            prevEnd, newStart = prev, end.next
             while curr != newStart:
                 curr.next, prev, curr = prev, curr, curr.next
 
@@ -44,7 +44,7 @@ class Solution:
             if reversals == 1:
                 res = end
             else:
-                prevStart.next = prev
+                prevEnd.next = prev
 
             prev = start
             prev.next = newStart
