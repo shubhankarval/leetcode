@@ -8,7 +8,7 @@ Leetcode Profile - https://leetcode.com/u/shubh_val/
 
 | Difficulty | Count  | Percentage |
 | ---------- | ------ | ---------- |
-| Easy       | 10     | 27%        |
-| Medium     | 25     | 68%        |
+| Easy       | 14     | 34%        |
+| Medium     | 25     | 61%        |
 | Hard       | 2      | 5%         |
-| **Total**  | **37** | **100%**   |
+| **Total**  | **41** | **100%**   |
