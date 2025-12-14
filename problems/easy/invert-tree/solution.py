@@ -3,8 +3,8 @@ Problem: Invert Binary Tree
 Difficulty: Easy
 URL: https://leetcode.com/problems/invert-binary-tree/
 
-Time Complexity: O(n)
-Space Complexity: O(n)
+Time Complexity: O(n) - n is the number of nodes in the tree
+Space Complexity: O(h) - h is the height of the tree
 """
 
 # Definition for a binary tree node.
