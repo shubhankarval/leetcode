@@ -1,6 +1,6 @@
 """
 Problem: Binary Tree Preorder Traversal
-Difficulty: Medium
+Difficulty: Easy
 URL: https://leetcode.com/problems/binary-tree-preorder-traversal/
 
 Time Complexity: O(n) - n is the number of nodes in the tree
@@ -15,6 +15,7 @@ Space Complexity: O(h) - h is the height of the tree
 #         self.right = right
 
 from typing import List, Optional
+
 
 class Solution:
     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:

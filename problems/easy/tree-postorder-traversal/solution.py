@@ -1,6 +1,6 @@
 """
 Problem: Binary Tree Postorder Traversal
-Difficulty: Medium
+Difficulty: Easy
 URL: https://leetcode.com/problems/binary-tree-postorder-traversal/
 
 Time Complexity: O(n) - n is the number of nodes in the tree
@@ -16,6 +16,7 @@ Space Complexity: O(h) - h is the height of the tree
 
 from typing import List, Optional
 
+
 class Solution:
     def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         lst = []
@@ -25,6 +26,6 @@ class Solution:
                 traverse(node.left)
                 traverse(node.right)
                 lst.append(node.val)
-        
+
         traverse(root)
         return lst
