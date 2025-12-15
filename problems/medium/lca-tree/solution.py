@@ -15,44 +15,18 @@ Space Complexity: O(h) where h is the height of the tree
 #         self.right = right
 
 """
-Intuition:
-find p & q in tree
-if either is not found, 
-create DS for both, and look for common node from reversed smaller DS
+Conditions:
+p,q both lesser or greather than node then move left or right
+p == node, q == node, p,q one is lesser, another is greater then return node
 """
-
-from collections import OrderedDict
 
 
 class Solution:
     def lowestCommonAncestor(
         self, root: TreeNode, p: TreeNode, q: TreeNode
     ) -> TreeNode:
-        pAncestors, qAncestors = self.getAncestors(root, p), self.getAncestors(root, q)
-
-        if len(pAncestors) < len(qAncestors):
-            a, b = pAncestors, qAncestors
-        else:
-            a, b = qAncestors, pAncestors
-
-        for node in reversed(a):
-            if node in b:
-                return node
-
-    def getAncestors(self, root: TreeNode, targetNode: TreeNode):
-        ancestors = OrderedDict()
-        found = False
-
-        def dfs(node):
-            nonlocal found
-            if node and not found:
-                ancestors[node] = node.val
-                if node.val == targetNode.val:
-                    found = True
-                elif node.val < targetNode.val:
-                    dfs(node.left)
-                else:
-                    dfs(node.right)
-
-        dfs(root)
-        return ancestors
+        if p.val <= root.val <= q.val or p.val >= root.val >= q.val:
+            return root
+        if p.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        return self.lowestCommonAncestor(root.right, p, q)
