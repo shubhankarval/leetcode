@@ -3,15 +3,8 @@ Problem: Serialize and Deserialize Binary Tree
 Difficulty: Hard
 URL: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 
-serialize() -
-Time Complexity: O(n)
-Space Complexity: O(w)
-
-deserialize() -
-Time Complexity: O(n)
-Space Complexity: O(n)
-
-where n is the number of nodes in the tree and w is the maximum width of the tree
+Time Complexity: O(n) where n is the number of nodes in the tree
+Space Complexity: O(w) where w is the maximum width of the tree
 """
 
 # Definition for a binary tree node.
@@ -35,33 +28,48 @@ class Codec:
         while not q.empty():
             node = q.get()
             if not node:
-                res += "-#"
+                res += "_#"
             else:
                 res += str(node.val) + "#"
                 q.put(node.left)
                 q.put(node.right)
 
-        return res[:-1]
+        return res
 
     # Decodes your encoded data to tree.
     def deserialize(self, data: str) -> Optional[TreeNode]:
-        data = data.split("#")
-        if data[0] == "-":
+        if data[0] == "_":
             return None
 
-        q = Queue()
-        root = TreeNode(int(data[0]))
+        i, q, root = 0, Queue(), TreeNode()
+
+        root.val, i = self.getVal(data, i)
         q.put(root)
 
-        for i in range(1, len(data) - 1, 2):
+        while i < len(data):
             node = q.get()
 
-            if data[i] != "-":
-                node.left = TreeNode(int(data[i]))
+            if data[i] != "_":
+                node.left = TreeNode()
+                node.left.val, i = self.getVal(data, i)
                 q.put(node.left)
+            else:
+                i += 2
 
-            if data[i + 1] != "-":
-                node.right = TreeNode(int(data[i + 1]))
+            if data[i] != "_":
+                node.right = TreeNode()
+                node.right.val, i = self.getVal(data, i)
                 q.put(node.right)
+            else:
+                i += 2
 
         return root
+
+    def getVal(self, data, i):
+        val = ""
+
+        while data[i] != "#":
+            val += data[i]
+            i += 1
+
+        return int(val), i + 1
