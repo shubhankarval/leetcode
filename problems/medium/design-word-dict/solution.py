@@ -31,19 +31,17 @@ class WordDictionary:
         node.isWord = True
 
     def search(self, word: str) -> bool:
-        ans = False
-
         def dfs(node, i):
-            nonlocal ans
-            if node:
-                if i == len(word):
-                    if node.isWord:
-                        ans = True
-                elif word[i] == ".":
-                    for n in node.children.values():
-                        dfs(n, i + 1)
-                elif word[i] in node.children:
-                    dfs(node.children[word[i]], i + 1)
+            if not node:
+                return False
+            if i == len(word):
+                return node.isWord
+            if word[i] == ".":
+                for n in node.children.values():
+                    if dfs(n, i + 1):
+                        return True
+            if word[i] in node.children:
+                return dfs(node.children[word[i]], i + 1)
+            return False
 
-        dfs(self.root, 0)
-        return ans
+        return dfs(self.root, 0)
