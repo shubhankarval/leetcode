@@ -3,8 +3,8 @@ Problem: K Closest Points to Origin
 Difficulty: Medium
 URL: https://leetcode.com/problems/k-closest-points-to-origin/
 
-Time Complexity:
-Space Complexity:
+Time Complexity: O(n + k log n) where n is number of points and k is number of closest points to return
+Space Complexity: O(n) where n is number of points
 """
 
 """
