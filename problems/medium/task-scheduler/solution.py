@@ -15,7 +15,7 @@ track next avlbl slot for task, update it when task finishes
 if count of task reaches 0, remove task
 """
 
-from collections import Counter, defaultdict
+from collections import Counter, deque
 import heapq
 
 
@@ -23,23 +23,21 @@ class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         heap = [-cnt for cnt in Counter(tasks).values()]
         heapq.heapify(heap)
-        cooldown = defaultdict(list)  # cycle -> list of tasks
+        cooldown = deque([])  # [cycle, task]
         cycle = 0
 
         while len(heap) or len(cooldown):
-            if cycle in cooldown:
-                for task in cooldown[cycle]:
-                    heapq.heappush(heap, task)
-                del cooldown[cycle]
+            while len(cooldown) and cycle == cooldown[0][0]:
+                heapq.heappush(heap, cooldown.popleft()[1])
 
             if not len(heap):
-                cycle += 1
+                cycle = cooldown[0][0]
                 continue
 
             task = heapq.heappop(heap)
             task += 1
             if task:
-                cooldown[cycle + n + 1].append(task)
+                cooldown.append([cycle + n + 1, task])
 
             cycle += 1
 
