@@ -20,7 +20,7 @@ class Solution:
                 if not pick[i]:
                     lst.append(nums[i])
                     pick[i] = True
-                    dfs(lst, s)
+                    dfs(lst, pick)
                     lst.pop()
                     pick[i] = False
 
