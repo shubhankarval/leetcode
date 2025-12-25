@@ -13,11 +13,11 @@ class Solution:
         res = []
 
         def dfs(lst, i):
-            if i < len(nums):
-                dfs(lst, i + 1)
-                dfs(lst + [nums[i]], i + 1)
-            else:
-                res.append(lst)
+            res.append(lst.copy())
+            for j in range(i, len(nums)):
+                lst.append(nums[j])
+                dfs(lst, j + 1)
+                lst.pop()
 
         dfs([], 0)
         return res
