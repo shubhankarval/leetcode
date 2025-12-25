@@ -15,9 +15,9 @@ where - n is the length of nums
 Intuition:
 Sort list
 Recurse through array
-Stop the moment sum exceeds the target
 Start with empty array
 Choose whether to select num or not
+Stop the moment sum exceeds the target
 """
 
 
@@ -27,15 +27,17 @@ class Solution:
         res = []
 
         def dfs(lst, total, i):
-            if total > target:
-                return False
             if total == target:
-                res.append(lst)
-                return False
-            if i < len(nums):
-                if dfs(lst + [nums[i]], total + nums[i], i):
-                    dfs(lst, total, i + 1)
-            return True
+                res.append(lst.copy())
+                return
+
+            for j in range(i, len(nums)):
+                if total + nums[j] > target:
+                    return
+
+                lst.append(nums[j])
+                dfs(lst, total + nums[j], j)
+                lst.pop()
 
         dfs([], 0, 0)
         return res
