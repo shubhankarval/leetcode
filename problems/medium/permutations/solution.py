@@ -12,17 +12,17 @@ class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
 
-        def dfs(lst, s):
+        def dfs(lst, pick):
             if len(lst) == len(nums):
                 res.append(lst.copy())
                 return
             for i in range(len(nums)):
-                if nums[i] not in s:
+                if not pick[i]:
                     lst.append(nums[i])
-                    s.add(nums[i])
+                    pick[i] = True
                     dfs(lst, s)
                     lst.pop()
-                    s.remove(nums[i])
+                    pick[i] = False
 
-        dfs([], set())
+        dfs([], [False] * len(nums))
         return res
