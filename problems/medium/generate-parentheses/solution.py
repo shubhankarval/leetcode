@@ -12,19 +12,16 @@ Space Complexity: O(n²) for the recursion stack and result storage
 
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        res = set()
+        res = {"()"}
 
-        def dfs(s):
-            if len(s) == n * 2:
-                res.add(s)
-                return
+        for _ in range(2, n + 1):
+            s = set()
+            for par in res:
+                for i in range(len(par)):
+                    if par[i] == "(":
+                        s.add(par[: i + 1] + "()" + par[i + 1 :])
+                s.add("()" + par)
+                s.add(par + "()")
+            res = s
 
-            for i in range(len(s)):
-                if s[i] == "(":
-                    dfs(s[: i + 1] + "()" + s[i + 1 :])
-
-            dfs("()" + s)
-            dfs(s + "()")
-
-        dfs("()")
         return list(res)
