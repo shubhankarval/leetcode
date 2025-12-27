@@ -25,11 +25,13 @@ class Solution:
                 i += 1
                 if i == len(word):
                     return True
+
+                s.add((r, c))
                 for row, col in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
-                    s.add((r, c))
                     if dfs(row, col, i, s):
                         return True
-                    s.remove((r, c))
+                s.remove((r, c))
+
             return False
 
         for r in range(rows):
