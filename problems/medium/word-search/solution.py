@@ -4,7 +4,7 @@ Difficulty: Medium
 URL: https://leetcode.com/problems/word-search/
 
 Time Complexity: Time: O(m * n * 4^L) where m is number of rows, n is number of columns, and L is the length of the word
-Space Complexity: O(L²) where L is the length of the word
+Space Complexity: O(L) where L is the length of the word
 """
 
 """
@@ -25,13 +25,11 @@ class Solution:
                 i += 1
                 if i == len(word):
                     return True
-                s = s | {(r, c)}
-                return (
-                    dfs(r + 1, c, i, s)
-                    or dfs(r - 1, c, i, s)
-                    or dfs(r, c + 1, i, s)
-                    or dfs(r, c - 1, i, s)
-                )
+                for row, col in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                    s.add((r, c))
+                    if dfs(row, col, i, s):
+                        return True
+                    s.remove((r, c))
             return False
 
         for r in range(rows):
