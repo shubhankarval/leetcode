@@ -3,7 +3,7 @@ Problem: N-Queens
 Difficulty: Hard
 URL: https://leetcode.com/problems/n-queens/
 
-Time Complexity: O(n! * n) where n is the size of the board
+Time Complexity: O(n!) where n is the size of the board
 Space Complexity: O(n²) where n is the size of the board
 """
 
@@ -11,7 +11,8 @@ Space Complexity: O(n²) where n is the size of the board
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
         board = [["." for _ in range(n)] for _ in range(n)]
-        res, visited = [], []
+        res = []
+        cols, posD, negD = set(), set(), set()
 
         def dfs(row):
             if row == n:
@@ -19,18 +20,19 @@ class Solution:
                 return
 
             for col in range(n):
-                skip = False
-                for prevRow, prevCol in visited:
-                    if col == prevCol or row - prevRow == abs(col - prevCol):
-                        skip = True
-                        break
-                if skip:
+                if col in cols or row + col in posD or row - col in negD:
                     continue
                 board[row][col] = "Q"
-                visited.append((row, col))
+                cols.add(col)
+                posD.add(row + col)
+                negD.add(row - col)
+
                 dfs(row + 1)
+
                 board[row][col] = "."
-                visited.pop()
+                cols.remove(col)
+                posD.remove(row + col)
+                negD.remove(row - col)
 
         dfs(0)
         return res
