@@ -13,23 +13,23 @@ class Solution:
         board = [["." for _ in range(n)] for _ in range(n)]
         res, visited = [], []
 
-        def dfs(r):
-            if r == n:
-                res.append(["".join(row) for row in board])
+        def dfs(row):
+            if row == n:
+                res.append(["".join(r) for r in board])
                 return
 
-            for c in range(n):
+            for col in range(n):
                 skip = False
-                for row, col in visited:
-                    if c == col or abs(r - row) == abs(c - col):
+                for prevRow, prevCol in visited:
+                    if col == prevCol or row - prevRow == abs(col - prevCol):
                         skip = True
                         break
                 if skip:
                     continue
-                board[r][c] = "Q"
-                visited.append((r, c))
-                dfs(r + 1)
-                board[r][c] = "."
+                board[row][col] = "Q"
+                visited.append((row, col))
+                dfs(row + 1)
+                board[row][col] = "."
                 visited.pop()
 
         dfs(0)
