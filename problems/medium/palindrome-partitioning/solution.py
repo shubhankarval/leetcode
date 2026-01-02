@@ -3,10 +3,11 @@ Problem: Palindrome Partitioning
 Difficulty: Medium
 URL: https://leetcode.com/problems/palindrome-partitioning/
 
-Time Complexity: O(n² * 2ⁿ) where n is the length of the string s
-Space Complexity: O(n²) where n is the length of the string s
+Time Complexity: O(n * 2ⁿ) where n is the length of the string s
+Space Complexity: O(n) where n is the length of the string s
 """
 
+from typing import List
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
@@ -28,8 +29,10 @@ class Solution:
         dfs(0)
         return res
 
-    def isPalindrome(self, s: str) -> bool:
-        mid = len(s) // 2
-        if len(s) % 2 == 0:
-            return s[:mid] == s[mid:][::-1]
-        return s[:mid] == s[mid + 1 :][::-1]
+    def isPalindrome(self, sub: str) -> bool:
+        l, r = 0, len(sub) - 1
+        while l < r:
+            if sub[l] != sub[r]:
+                return False
+            l, r = l + 1, r - 1
+        return True
