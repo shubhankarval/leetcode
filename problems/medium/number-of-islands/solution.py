@@ -4,7 +4,7 @@ Difficulty: Medium
 URL: https://leetcode.com/problems/number-of-islands/
 
 Time Complexity: O(m * n) where m is the number of rows and n is the number of columns in the grid
-Space Complexity: O(m * n) in the worst case for the seen set and recursion stack
+Space Complexity: O(m * n) in the worst case for recursion stack
 """
 
 from typing import List
