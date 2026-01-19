@@ -19,10 +19,8 @@ class Solution:
             if not (0 <= r < rows) or not (0 <= c < cols) or grid[r][c] == "0":
                 return
             grid[r][c] = "0"
-            dfs(r - 1, c)
-            dfs(r + 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
+            for row, col in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                dfs(row, col)
 
         for r in range(rows):
             for c in range(cols):
