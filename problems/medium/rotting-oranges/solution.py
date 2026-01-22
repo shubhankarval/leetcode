@@ -26,15 +26,23 @@ class Solution:
         totalMin = 0
 
         rows, cols = len(grid), len(grid[0])
+        freshOranges = 0
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == 2:
                     queue.append((r, c, 0))
                     visited.add((r, c))
+                if grid[r][c] == 1:
+                    freshOranges += 1
+
+        if not freshOranges:
+            return 0
 
         while queue:
             currR, currC, currMin = queue.popleft()
             totalMin = currMin
+            if grid[currR][currC] == 1:
+                freshOranges -= 1
 
             for nextR, nextC in [
                 (currR + 1, currC),
@@ -51,10 +59,4 @@ class Solution:
                     if grid[nextR][nextC] != 0:
                         queue.append((nextR, nextC, currMin + 1))
 
-        if len(visited) != rows * cols:
-            for r in range(rows):
-                for c in range(cols):
-                    if (r, c) not in visited and grid[r][c] == 1:
-                        return -1
-
-        return totalMin
+        return totalMin if not freshOranges else -1
