@@ -3,16 +3,15 @@ Problem: Pacific Atlantic Water Flow
 Difficulty: Medium
 URL: https://leetcode.com/problems/pacific-atlantic-water-flow/
 
-Time Complexity: O((m * n)²) where m is number of rows and n is number of columns
+Time Complexity: O(m * n) where m is number of rows and n is number of columns
 Space Complexity: O(m * n) for the visited set
 """
 
 """
 Intuition:
-Dfs from each cell
-Check if it can reach any cell adj to each ocean:
-1. top & left for pacific
-2. bottom and right for atlantic
+dfs from borders of matrix
+check which cells >= than prev, add to appr set
+return common elements from both sets in list
 """
 
 from typing import List
@@ -21,39 +20,28 @@ from typing import List
 class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         rows, cols = len(heights), len(heights[0])
-        pacific = atlantic = False
-        directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
-        visited = set()
+        canReachPac, canReachAtl = set(), set()
+        directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
-        def dfs(r, c):
-            nonlocal pacific, atlantic
-            visited.add((r, c))
-            if r - 1 == -1 or c - 1 == -1:
-                pacific = True
-            if r + 1 == rows or c + 1 == cols:
-                atlantic = True
-            if pacific and atlantic:
+        def dfs(r, c, s):
+            if (r, c) in s:
                 return
+            s.add((r, c))
             for dr, dc in directions:
                 nr, nc = r + dr, c + dc
                 if (
-                    (not pacific or not atlantic)
-                    and 0 <= nr < rows
+                    0 <= nr < rows
                     and 0 <= nc < cols
-                    and (nr, nc) not in visited
-                    and heights[r][c] >= heights[nr][nc]
+                    and heights[r][c] <= heights[nr][nc]
                 ):
-                    dfs(nr, nc)
+                    dfs(nr, nc, s)
 
-        res = []
+        for c in range(cols):
+            dfs(0, c, canReachPac)
+            dfs(rows - 1, c, canReachAtl)
+
         for r in range(rows):
-            for c in range(cols):
-                dfs(r, c)
-                if pacific and atlantic:
-                    res.append([r, c])
-                elif not pacific and not atlantic:
-                    heights[r][c] = 10**5 + 1
-                pacific = atlantic = False
-                visited = set()
+            dfs(r, 0, canReachPac)
+            dfs(r, cols - 1, canReachAtl)
 
-        return res
+        return list(map(lambda x: list(x), list(canReachPac & canReachAtl)))
