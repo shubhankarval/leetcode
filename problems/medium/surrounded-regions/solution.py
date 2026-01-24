@@ -9,9 +9,8 @@ Space Complexity: O(m * n) for the visited set in the worst case
 
 """
 Intuition:
-DFS from O
-if all dirs have X, then valid
-if any O in region on border, whole region is invalid
+DFS from O on borders and mark all visited O cells
+make all other cells as X
 """
 
 from typing import List
@@ -21,37 +20,31 @@ class Solution:
     def solve(self, board: List[List[str]]) -> None:
         rows, cols = len(board), len(board[0])
         directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
-        borderIdx = {(dr, dc): i for i, (dr, dc) in enumerate(directions)}
-
-        visited, borders, borderCellFound = set(), [False] * 4, False
+        visited = set()
 
         def dfs(r, c):
-            nonlocal borderCellFound
-
             if (r, c) in visited:
                 return
             visited.add((r, c))
 
-            if r - 1 < 0 or r + 1 == rows or c - 1 < 0 or c + 1 == cols:
-                borderCellFound = True
-                return
-
             for dr, dc in directions:
-                if not borderCellFound:
-                    nr, nc = r + dr, c + dc
-                    if board[nr][nc] == "O":
-                        dfs(nr, nc)
-                    else:
-                        borders[borderIdx[(dr, dc)]] = True
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] == "O":
+                    dfs(nr, nc)
 
-        allVisited = set()
+        for r in range(rows):
+            if board[r][0] == "O":
+                dfs(r, 0)
+            if board[r][cols - 1] == "O":
+                dfs(r, cols - 1)
+
+        for c in range(cols):
+            if board[0][c] == "O":
+                dfs(0, c)
+            if board[rows - 1][c] == "O":
+                dfs(rows - 1, c)
+
         for r in range(rows):
             for c in range(cols):
-                if board[r][c] == "O" and (r, c) not in allVisited:
-                    dfs(r, c)
-                    if not borderCellFound and False not in borders:
-                        for row, col in visited:
-                            board[row][col] = "X"
-                    else:
-                        allVisited.update(visited)
-                    visited, borders, borderCellFound = set(), [False] * 4, False
+                if (r, c) not in visited:
+                    board[r][c] = "X"
