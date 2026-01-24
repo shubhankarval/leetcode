@@ -1,7 +1,7 @@
 """
 Problem: Islands and Treasure
 Difficulty: Medium
-URL: https://neetcode.io/problems/islands-and-treasure/solution
+URL: https://neetcode.io/problems/islands-and-treasure/
 
 Time Complexity: O(m * n) where m is the number of rows and n is the number of columns in the grid
 Space Complexity: O(m * n) for the BFS queue and visited set in the worst case
@@ -14,6 +14,8 @@ from collections import deque
 class Solution:
     def islandsAndTreasure(self, grid: List[List[int]]) -> None:
         rows, cols = len(grid), len(grid[0])
+        directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+
         queue = deque([])
         visited = set()
 
@@ -24,21 +26,13 @@ class Solution:
                     visited.add((r, c))
 
         while queue:
-            currR, currC, currDist = queue.popleft()
-            if grid[currR][currC] > 0:
-                grid[currR][currC] = min(grid[currR][currC], currDist)
+            r, c, dist = queue.popleft()
+            if grid[r][c] > 0:
+                grid[r][c] = min(grid[r][c], dist)
 
-            for newR, newC in [
-                (currR + 1, currC),
-                (currR - 1, currC),
-                (currR, currC + 1),
-                (currR, currC - 1),
-            ]:
-                if (
-                    0 <= newR < rows
-                    and 0 <= newC < cols
-                    and (newR, newC) not in visited
-                ):
-                    visited.add((newR, newC))
-                    if grid[newR][newC] != -1:
-                        queue.append((newR, newC, currDist + 1))
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and (nr, nc) not in visited:
+                    visited.add((nr, nc))
+                    if grid[nr][nc] != -1:
+                        queue.append((nr, nc, dist + 1))
