@@ -20,13 +20,9 @@ class Solution:
     def solve(self, board: List[List[str]]) -> None:
         rows, cols = len(board), len(board[0])
         directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
-        visited = set()
 
         def dfs(r, c):
-            if (r, c) in visited:
-                return
-            visited.add((r, c))
-
+            board[r][c] = "T"
             for dr, dc in directions:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] == "O":
@@ -46,5 +42,7 @@ class Solution:
 
         for r in range(rows):
             for c in range(cols):
-                if (r, c) not in visited:
+                if board[r][c] == "T":
+                    board[r][c] = "O"
+                else:
                     board[r][c] = "X"
