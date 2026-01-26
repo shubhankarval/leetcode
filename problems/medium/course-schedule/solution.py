@@ -13,25 +13,28 @@ from collections import defaultdict, deque
 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        courseToPre = defaultdict(set)
-        preToCourse = defaultdict(set)
-
+        courseToPre = defaultdict(list)
         for course, prereq in prerequisites:
-            courseToPre[course].add(prereq)
-            preToCourse[prereq].add(course)
+            courseToPre[course].append(prereq)
 
-        queue, visited = deque([]), set()
-        for num in range(numCourses):
-            if num not in courseToPre:
-                queue.append(num)
-                visited.add(num)
+        path = [False] * numCourses
 
-        while queue:
-            prereq = queue.popleft()
+        # check if cycle exists in graph
+        def dfs(course):
+            if path[course]:
+                return True
+            path[course] = True
 
-            for course in preToCourse[prereq]:
-                if course not in visited and courseToPre[course].issubset(visited):
-                    queue.append(course)
-                    visited.add(course)
+            if course in courseToPre:
+                for prereq in courseToPre[course]:
+                    if dfs(prereq):
+                        return True
 
-        return len(visited) == numCourses
+            path[course] = False
+            return False
+
+        for course in range(numCourses):
+            if dfs(course):
+                return False
+
+        return True
