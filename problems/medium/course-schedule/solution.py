@@ -3,12 +3,12 @@ Problem: Course Schedule
 Difficulty: Medium
 URL: https://leetcode.com/problems/course-schedule/
 
-Time Complexity: O(V + E * V) ≈ O(E * V) where V is the number of courses and E is the number of prerequisites
-Space Complexity: O(V + E) for graph maps, queue and visited set
+Time Complexity: O(V + E) where V is the number of courses and E is the number of prerequisites
+Space Complexity: O(V + E) for adjacency list, path, visited and recursion stack
 """
 
 from typing import List
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 class Solution:
@@ -17,13 +17,16 @@ class Solution:
         for course, prereq in prerequisites:
             courseToPre[course].append(prereq)
 
-        path = [False] * numCourses
+        path, visited = [False] * numCourses, [False] * numCourses
 
         # check if cycle exists in graph
         def dfs(course):
             if path[course]:
                 return True
+            if visited[course]:
+                return False
             path[course] = True
+            visited[course] = True
 
             if course in courseToPre:
                 for prereq in courseToPre[course]:
@@ -34,7 +37,7 @@ class Solution:
             return False
 
         for course in range(numCourses):
-            if dfs(course):
+            if not visited[course] and dfs(course):
                 return False
 
         return True
