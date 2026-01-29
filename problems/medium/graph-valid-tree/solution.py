@@ -4,7 +4,7 @@ Difficulty: Medium
 URL: https://neetcode.io/problems/valid-tree/
 
 Time Complexity:  O(V + E) where V is number of vertices and E is number of edges
-Space Complexity: O(V + E) for adjacency list and visited set
+Space Complexity: O(V + E) for adjacency list, visited set and recursion stack
 """
 
 """
@@ -19,27 +19,20 @@ from typing import List
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
         adjList = [[] for _ in range(n)]
-        visited = set()
         for v1, v2 in edges:
-            minV, maxV = min(v1, v2), max(v1, v2)
-            if maxV not in visited:
-                visited.add(maxV)
-                adjList[minV].append(maxV)
-            elif minV not in visited:
-                visited.add(minV)
-                adjList[maxV].append(minV)
-            else:
-                return False
+            adjList[v1].append(v2)
+            adjList[v2].append(v1)
 
         visited = set()
 
-        def dfs(node):
+        def dfs(node, parent):
             if node in visited:
                 return False
             visited.add(node)
-            for n in adjList[node]:
-                if not dfs(n):
+
+            for child in adjList[node]:
+                if child != parent and not dfs(child, node):
                     return False
             return True
 
-        return dfs(0) and len(visited) == n
+        return dfs(0, None) and len(visited) == n
