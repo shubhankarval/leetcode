@@ -4,7 +4,7 @@ Difficulty: Medium
 URL: https://leetcode.com/problems/redundant-connection/
 
 Time Complexity: O(V + E) where V is number of vertices and E is number of edges
-Space Complexity: O(V + E) for adjacency list, visited array, stack, and cycleNodes set
+Space Complexity: O(V + E) for adjacency list, visited array, stack, and cycle set
 """
 
 """
@@ -13,38 +13,38 @@ DFS w/ backtracking
 """
 
 from typing import List
-from collections import defaultdict
 
 
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        adjMap = defaultdict(list)
+        n = len(edges)
+        adjList = [[] for _ in range(n + 1)]
         for v1, v2 in edges:
-            adjMap[v1].append(v2)
-            adjMap[v2].append(v1)
+            adjList[v1].append(v2)
+            adjList[v2].append(v1)
 
-        visited, stack, cycleNodes = [False] * len(edges), [], set()
+        visited = [False] * (n + 1)
+        cycle = set()
+        stack = []
 
         def dfs(node, prev):
-            if visited[node - 1]:
-                idx = -1
-                for n in reversed(stack):
-                    if n == node:
-                        break
+            if visited[node]:
+                idx = len(stack) - 1
+                while stack[idx] != node:
                     idx -= 1
-                cycleNodes.update(stack[idx:])
+                cycle.update(stack[idx:])
                 return
 
-            visited[node - 1] = True
+            visited[node] = True
             stack.append(node)
 
-            for nei in adjMap[node]:
-                if not cycleNodes and nei != prev:
+            for nei in adjList[node]:
+                if not cycle and nei != prev:
                     dfs(nei, node)
 
             stack.pop()
 
         dfs(1, None)
         for v1, v2 in reversed(edges):
-            if v1 in cycleNodes and v2 in cycleNodes:
+            if v1 in cycle and v2 in cycle:
                 return [v1, v2]
