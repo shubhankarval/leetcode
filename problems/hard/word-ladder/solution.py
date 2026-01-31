@@ -3,7 +3,7 @@ Problem: Word Ladder
 Difficulty: Hard
 URL: https://leetcode.com/problems/word-ladder/
 
-Time Complexity: O(n²L * n!) ≈ O(n!) where n is number of words in wordList and L is length of each word
+Time Complexity: O(n²L + n!) ≈ O(n!) where n is number of words in wordList and L is length of each word
 Space Complexity: O(n²) for wordJump & path dictionaries and recursion stack
 """
 
