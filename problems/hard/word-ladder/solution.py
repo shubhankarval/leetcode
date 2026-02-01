@@ -3,8 +3,8 @@ Problem: Word Ladder
 Difficulty: Hard
 URL: https://leetcode.com/problems/word-ladder/
 
-Time Complexity: O(N² * L) where N is the number of words in wordList and L is the length of each word.
-Space Complexity: O(N²) for the adjacency map and O(N) for the queue and visited set.
+Time Complexity: O(N * L²) where N is the number of words and L is the length of each word.
+Space Complexity: O(N * L²) for the adjacency map and O(N * L) for the queue and visited set.
 """
 
 from typing import List
@@ -13,42 +13,38 @@ from collections import deque
 
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        adjMap = {}
-        beginIdx = endIdx = -1
-        for i, word in enumerate(wordList):
-            adjMap[i] = self.addAdjacentNodes(word, i, wordList)
-            if word == beginWord:
-                beginIdx = i
-            elif word == endWord:
-                endIdx = i
-        if endIdx == -1:
+        adjMap = dict.fromkeys(wordList, [])
+        for word in wordList:
+            adjMap[word] = self.addAdjacentWords(word, adjMap)
+        if endWord not in adjMap:
             return 0
-        if beginIdx == -1:
-            adjMap[beginIdx] = self.addAdjacentNodes(beginWord, beginIdx, wordList)
+        if beginWord not in adjMap:
+            adjMap[beginWord] = self.addAdjacentWords(beginWord, adjMap)
 
-        queue = deque([[beginIdx, 1]])  # idx, cnt
-        visited = set([beginIdx])  # set of indices
+        queue = deque([[beginWord, 1]])  # word, cnt
+        visited = set([beginWord])
 
         while queue:
-            currIdx, cnt = queue.popleft()
-            if currIdx == endIdx:
+            currWord, cnt = queue.popleft()
+            if currWord == endWord:
                 return cnt
-            for i in adjMap[currIdx]:
-                if i not in visited:
-                    queue.append([i, cnt + 1])
-                    visited.add(i)
+            for word in adjMap[currWord]:
+                if word not in visited:
+                    queue.append([word, cnt + 1])
+                    visited.add(word)
 
         return 0
 
-    def addAdjacentNodes(self, currWord, currIdx, wordList):
-        wordIndices = []
-        for wordIdx, word in enumerate(wordList):
-            if wordIdx != currIdx:
-                diff = i = 0
-                while diff <= 1 and i < len(currWord):
-                    if word[i] != currWord[i]:
-                        diff += 1
-                    i += 1
-                if diff == 1:
-                    wordIndices.append(wordIdx)
-        return wordIndices
+    def addAdjacentWords(self, word, adjMap):
+        words = []
+        letters = "qwertyuiopasdfghjklzxcvbnm"
+        word = list(word)
+        for i, ch in enumerate(word):
+            for letter in letters:
+                if ch != letter:
+                    word[i] = letter
+                    adjWord = "".join(word)
+                    if adjWord in adjMap:
+                        words.append(adjWord)
+            word[i] = ch
+        return words
