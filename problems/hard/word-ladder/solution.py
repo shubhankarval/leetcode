@@ -38,13 +38,12 @@ class Solution:
     def addAdjacentWords(self, word, adjMap):
         words = []
         letters = "qwertyuiopasdfghjklzxcvbnm"
-        word = list(word)
+
         for i, ch in enumerate(word):
+            pre, suf = word[:i], word[i + 1 :]
             for letter in letters:
                 if ch != letter:
-                    word[i] = letter
-                    adjWord = "".join(word)
+                    adjWord = pre + letter + suf
                     if adjWord in adjMap:
                         words.append(adjWord)
-            word[i] = ch
         return words
