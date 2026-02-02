@@ -4,7 +4,7 @@ Difficulty: Hard
 URL: https://leetcode.com/problems/word-ladder/
 
 Time Complexity: O(N * L²) where N is the number of words and L is the length of each word.
-Space Complexity: O(N * L²) for the adjacency map and O(N * L) for the queue and visited set.
+Space Complexity: O(N * L) for the adjacency map, queues, and visited dictionaries.
 """
 
 from typing import List
@@ -13,37 +13,40 @@ from collections import deque
 
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        adjMap = dict.fromkeys(wordList, [])
-        for word in wordList:
-            adjMap[word] = self.addAdjacentWords(word, adjMap)
-        if endWord not in adjMap:
+        wordSet = set(wordList)
+        if endWord not in wordSet:
             return 0
-        if beginWord not in adjMap:
-            adjMap[beginWord] = self.addAdjacentWords(beginWord, adjMap)
+        wordSet.add(beginWord)
 
-        queue = deque([[beginWord, 1]])  # word, cnt
-        visited = set([beginWord])
+        q1, q2 = deque([beginWord]), deque([endWord])
+        fromBegin, fromEnd = {beginWord: 1}, {endWord: 1}
 
-        while queue:
-            currWord, cnt = queue.popleft()
-            if currWord == endWord:
-                return cnt
-            for word in adjMap[currWord]:
-                if word not in visited:
-                    queue.append([word, cnt + 1])
-                    visited.add(word)
+        while q1 and q2:
+            if len(q1) > len(q2):
+                q1, q2 = q2, q1
+                fromBegin, fromEnd = fromEnd, fromBegin
+
+            size = len(q1)
+            for _ in range(size):
+                currWord = q1.popleft()
+                dist = fromBegin[currWord]
+
+                for word in self.getAdjacentWords(currWord, wordSet):
+                    if word in fromEnd:
+                        return dist + fromEnd[word]
+                    if word not in fromBegin:
+                        fromBegin[word] = dist + 1
+                        q1.append(word)
 
         return 0
 
-    def addAdjacentWords(self, word, adjMap):
+    def getAdjacentWords(self, word, wordSet):
         words = []
-        letters = "qwertyuiopasdfghjklzxcvbnm"
-
-        for i, ch in enumerate(word):
-            pre, suf = word[:i], word[i + 1 :]
+        letters = "abcdefghijklmnopqrstuvwxyz"
+        for i in range(len(word)):
             for letter in letters:
-                if ch != letter:
-                    adjWord = pre + letter + suf
-                    if adjWord in adjMap:
+                if word[i] != letter:
+                    adjWord = word[:i] + letter + word[i + 1 :]
+                    if adjWord in wordSet:
                         words.append(adjWord)
         return words
