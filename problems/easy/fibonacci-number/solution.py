@@ -28,14 +28,12 @@ class Solution:
 
     # Recursive DP
     def fib(self, n: int) -> int:
-        dp = [0] * (n + 1)
+        dp = [None] * (n + 2)
+        dp[0], dp[1] = 0, 1
 
         def rec(n):
-            if n == 0 or n == 1:
-                return n
-            if dp[n]:
-                return dp[n]
-            dp[n] = rec(n - 1) + rec(n - 2)
+            if dp[n] == None:
+                dp[n] = rec(n - 1) + rec(n - 2)
             return dp[n]
 
         return rec(n)
