@@ -14,10 +14,8 @@ class Solution:
         if n == 0 or n == 1:
             return n
         n1, n2 = 0, 1
-        n -= 2
-        while n:
+        for _ in range(2, n):
             n1, n2 = n2, n1 + n2
-            n -= 1
         return n1 + n2
 
     # Recursive (suboptimal)
