@@ -13,9 +13,8 @@ class Solution:
         if n == 0 or n == 1:
             return n
         n1, n2 = 0, 1
-        fibSum = 0
-        while n > 1:
-            fibSum = n1 + n2
-            n1, n2 = n2, fibSum
+        n -= 2
+        while n:
+            n1, n2 = n2, n1 + n2
             n -= 1
-        return fibSum
+        return n1 + n2
