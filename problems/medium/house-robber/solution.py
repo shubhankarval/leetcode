@@ -15,10 +15,10 @@ class Solution:
         dp = [None] * len(nums)
 
         def rec(i):
-            if i > len(nums) - 1:
+            if i >= len(nums):
                 return 0
             if dp[i] == None:
-                dp[i] = nums[i] + max(rec(i + 2), rec(i + 3))
+                dp[i] = max(nums[i] + rec(i + 2), rec(i + 1))
             return dp[i]
 
-        return max(rec(0), rec(1))
+        return rec(0)
