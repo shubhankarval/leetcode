@@ -16,7 +16,16 @@ class Solution:
             sub = s[i]
             for j in range(i + 1, len(s)):
                 sub += s[j]
-                if len(sub) > len(res) and sub == sub[::-1]:
+                if len(sub) > len(res) and self.isPalindrome(sub):
                     res = sub
 
         return res
+
+    def isPalindrome(self, s):
+        i, j = 0, len(s) - 1
+        while i < j:
+            if s[i] != s[j]:
+                return False
+            i += 1
+            j -= 1
+        return True
