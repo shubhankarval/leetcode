@@ -13,7 +13,7 @@ from typing import List
 class Solution:
     # DP Bottom-Up
     def rob(self, nums: List[int]) -> int:
-        one = two = three = 0  # 1, 2, 3 places behind the current index
+        one = two = three = 0  # 1, 2, 3 houses behind the current house
         for num in nums:
             one, two, three = num + max(two, three), one, two
         return max(one, two)
