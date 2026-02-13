@@ -18,5 +18,7 @@ class Solution:
             for j in range(i + 1, len(nums)):
                 prod *= nums[j]
                 maxProd = max(prod, maxProd)
+                if prod == 0:
+                    break
             res = max(res, maxProd)
         return res
