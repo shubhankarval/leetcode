@@ -13,7 +13,7 @@ from typing import List
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         maxSum = float("-inf")
-        currSum = 0
+        currSum = nums[0]
         for i in range(1, len(nums)):
             if nums[i] >= 0:
                 if currSum < 0:
