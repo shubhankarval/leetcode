@@ -3,8 +3,8 @@ Problem: Partition Equal Subset Sum
 Difficulty: Medium
 URL: https://leetcode.com/problems/partition-equal-subset-sum/
 
-Time Complexity: O(n² * t) where n is the length of nums and t is the half-sum of nums array
-Space Complexity: O(n * t) for dp dict and recursion stack
+Time Complexity: O(n * s) where n is the length of nums and s is the half-sum of nums
+Space Complexity: O(s) for the set of sums
 """
 
 from typing import List
@@ -17,18 +17,14 @@ class Solution:
             return False
 
         target = total // 2
-        dp = {}
+        sums = set([0])
+        for i in range(len(nums) - 1, -1, -1):
+            if target - nums[i] in sums:
+                return True
+            newSums = []
+            for s in sums:
+                if s + nums[i] < target:
+                    newSums.append(s + nums[i])
+            sums.update(newSums)
 
-        def dfs(i, total):
-            if (i, total) not in dp:
-                dp[(i, total)] = False
-                if total == target:
-                    dp[(i, total)] = True
-                elif total < target:
-                    for j in range(i + 1, len(nums)):
-                        if dfs(j, total + nums[j]):
-                            dp[(i, total)] = True
-                            break
-            return dp[(i, total)]
-
-        return dfs(-1, 0)
+        return False
