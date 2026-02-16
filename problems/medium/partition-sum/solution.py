@@ -3,8 +3,8 @@ Problem: Partition Equal Subset Sum
 Difficulty: Medium
 URL: https://leetcode.com/problems/partition-equal-subset-sum/
 
-Time Complexity: O(n * t) where n is the length of nums and target is the half-sum of nums array
-Space Complexity: O(t) where target is the half-sum of nums array
+Time Complexity: O(n² * t) where n is the length of nums and t is the half-sum of nums array
+Space Complexity: O(n * t) for dp dict and recursion stack
 """
 
 from typing import List
