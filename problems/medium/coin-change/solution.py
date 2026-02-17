@@ -29,6 +29,19 @@ from typing import List
 
 
 class Solution:
+    # DP Bottom-Up
+    def coinChange(self, avlblCoins: List[int], targetAmt: int) -> int:
+        dp = [targetAmt + 1] * (targetAmt + 1)
+        dp[0] = 0
+
+        for amt in range(1, targetAmt + 1):
+            for coin in avlblCoins:
+                if amt >= coin:
+                    dp[amt] = min(dp[amt], 1 + dp[amt - coin])
+
+        return -1 if dp[targetAmt] > targetAmt else dp[targetAmt]
+
+    # DP Top-Down
     def coinChange(self, avlblCoins: List[int], targetAmt: int) -> int:
         maxCoins = targetAmt + 1  # 1 plus max no. of coins possible
         dp = [0] * maxCoins
