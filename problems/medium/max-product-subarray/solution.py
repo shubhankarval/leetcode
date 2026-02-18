@@ -11,6 +11,26 @@ from typing import List
 
 
 class Solution:
+    # Simple solution - two pass
+    def maxProduct(self, nums: List[int]) -> int:
+        def get_max_pass(iterator):
+            max_prod = float("-inf")
+            prod = 1
+            has_zero = False
+
+            for num in iterator:
+                prod *= num
+                max_prod = max(max_prod, prod)
+
+                if num == 0:
+                    has_zero = True
+                    prod = 1
+
+            return max(max_prod, 0) if has_zero else max_prod
+
+        return max(get_max_pass(nums), get_max_pass(reversed(nums)))
+
+    # Complex solution - one pass
     def maxProduct(self, nums: List[int]) -> int:
         def trim_negative_edge(start, end):
             if end - start == 1:
