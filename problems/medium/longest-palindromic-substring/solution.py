@@ -10,22 +10,23 @@ Space Complexity: O(n)
 
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        res = s[0]
-
+        res = ""
         for i in range(len(s)):
-            sub = s[i]
-            for j in range(i + 1, len(s)):
-                sub += s[j]
-                if len(sub) > len(res) and self.isPalindrome(sub):
-                    res = sub
-
+            j = i + len(res)
+            if j >= len(s):
+                break
+            word = s[i:j]
+            for k in range(j, len(s)):
+                word += s[k]
+                if self.isPalindrome(word):
+                    res = word
         return res
 
     def isPalindrome(self, s):
-        i, j = 0, len(s) - 1
-        while i < j:
-            if s[i] != s[j]:
+        l, r = 0, len(s) - 1
+        while l < r:
+            if s[l] != s[r]:
                 return False
-            i += 1
-            j -= 1
+            l += 1
+            r -= 1
         return True
