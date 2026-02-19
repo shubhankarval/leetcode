@@ -12,23 +12,20 @@ from typing import List
 
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        words = set(wordDict)
-
-        # can string starting from index i be resolved using wordDict?
-        dp = [True] * len(s)
+        wordSet = set(wordDict)
+        memo = [None] * len(s)
 
         def dfs(i):
             if i == len(s):
                 return True
-
-            if dp[i]:
+            if memo[i] == None:
+                memo[i] = False
                 word = ""
                 for j in range(i, len(s)):
                     word += s[j]
-                    if word in words:
-                        if dfs(j + 1):
-                            return True
-            dp[i] = False
-            return dp[i]
+                    if word in wordSet and dfs(j + 1):
+                        memo[i] = True
+                        break
+            return memo[i]
 
         return dfs(0)
