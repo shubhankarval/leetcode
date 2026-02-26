@@ -12,14 +12,14 @@ from typing import List
 
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        intervals.sort(key=lambda x: (x[1], -x[0]), reverse=True)
+        intervals.sort()
         i, n = 0, len(intervals)
         res = []
 
         while i < n:
             j = i + 1
-            while j < n and intervals[j][1] >= intervals[i][0]:
-                intervals[i][0] = min(intervals[i][0], intervals[j][0])
+            while j < n and intervals[i][1] >= intervals[j][0]:
+                intervals[i][1] = max(intervals[i][1], intervals[j][1])
                 j += 1
             res.append(intervals[i])
             i = j
