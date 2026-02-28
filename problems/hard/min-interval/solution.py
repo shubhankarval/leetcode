@@ -14,15 +14,12 @@ from typing import List
 
 class Solution:
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
-        intLength = sorted(
-            list(map(lambda x: [x[0], x[1], x[1] - x[0] + 1], intervals)),
-            key=lambda x: x[2],
-        )
+        intervals.sort(key=lambda x: x[1] - x[0])
         res = []
         for q in queries:
             res.append(-1)
-            for start, end, length in intLength:
+            for start, end in intervals:
                 if start <= q <= end:
-                    res[-1] = length
+                    res[-1] = end - start + 1
                     break
         return res
