@@ -3,11 +3,12 @@ Problem: Meeting Rooms II
 Difficulty: Easy
 URL: https://leetcode.com/problems/meeting-rooms-ii/
 
-Time Complexity: O(n²)
+Time Complexity: O(nlogn)
 Space Complexity: O(n)
 """
 
 from typing import List
+import heapq
 
 
 # Definition of Interval:
@@ -19,17 +20,14 @@ class Interval(object):
 
 class Solution:
     def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        if not intervals:
+            return 0
         intervals.sort(key=lambda x: x.start)
-        rooms = []
+        rooms = [intervals[0].end]
 
-        for interval in intervals:
-            roomFound = False
-            for i in range(len(rooms)):
-                if rooms[i] <= interval.start:
-                    rooms[i] = interval.end
-                    roomFound = True
-                    break
-            if not roomFound:
-                rooms.append(interval.end)
+        for i in range(1, len(intervals)):
+            if intervals[i].start >= rooms[0]:
+                heapq.hep(rooms)
+            heapq.heappush(rooms, intervals[i].end)
 
         return len(rooms)
