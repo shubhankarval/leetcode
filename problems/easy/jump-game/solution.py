@@ -3,7 +3,7 @@ Problem: Jump Game
 Difficulty: Easy
 URL: https://leetcode.com/problems/jump-game/
 
-Time Complexity: O(n²)
+Time Complexity: O(n)
 Space Complexity: O(1)
 """
 
@@ -11,6 +11,14 @@ from typing import List
 
 
 class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        t = len(nums) - 1
+        for i in range(len(nums) - 2, -1, -1):
+            if nums[i] + i >= t:
+                t = i
+        return t == 0
+
+    # Alternative solution (O(n²) time, O(1) space)
     def canJump(self, nums: List[int]) -> bool:
         i, n = 0, len(nums)
         while i < n:
