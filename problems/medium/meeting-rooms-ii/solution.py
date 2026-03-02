@@ -1,7 +1,7 @@
 """
 Problem: Meeting Rooms II
 Difficulty: Easy
-URL: https://leetcode.com/problems/meeting-rooms-ii/
+URL: https://neetcode.io/problems/meeting-schedule-ii
 
 Time Complexity: O(nlogn)
 Space Complexity: O(n)
