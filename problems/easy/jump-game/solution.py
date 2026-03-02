@@ -4,7 +4,7 @@ Difficulty: Easy
 URL: https://leetcode.com/problems/jump-game/
 
 Time Complexity: O(n²)
-Space Complexity: O(n)
+Space Complexity: O(1)
 """
 
 from typing import List
@@ -12,17 +12,22 @@ from typing import List
 
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        dp = [None] * len(nums)
+        i, n = 0, len(nums)
+        while i < n:
+            maxJ = nxt = 0
 
-        def dfs(i):
-            if i + nums[i] >= len(nums) - 1:
-                return True
-            if dp[i] == None:
-                dp[i] = False
-                for j in range(1, nums[i] + 1):
-                    if dfs(i + j):
-                        dp[i] = True
-                        break
-            return dp[i]
+            for j in range(i, i + nums[i] + 1):
+                currJ = nums[j] + j
+                if currJ >= n - 1:
+                    return True
+                if nums[j] == 0:
+                    continue
+                if currJ >= maxJ:
+                    maxJ = currJ
+                    nxt = j
 
-        return dfs(0)
+            if i == nxt:
+                return False
+            i = nxt
+
+        return False
