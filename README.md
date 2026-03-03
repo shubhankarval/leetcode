@@ -1,6 +1,6 @@
 # LeetCode Solutions
 
-A comprehensive collection of my LeetCode problem solutions implemented in multiple programming languages, organized by difficulty and topic.
+A comprehensive collection of my LeetCode problem solutions implemented in multiple programming languages, organized by difficulty.
 
 Leetcode Profile - https://leetcode.com/u/shubh_val/
 
@@ -9,6 +9,6 @@ Leetcode Profile - https://leetcode.com/u/shubh_val/
 | Difficulty | Count   | Percentage |
 | ---------- | ------- | ---------- |
 | Easy       | 27      | 24%        |
-| Medium     | 74      | 67%        |
+| Medium     | 75      | 67%        |
 | Hard       | 10      | 9%         |
-| **Total**  | **111** | **100%**   |
+| **Total**  | **112** | **100%**   |
