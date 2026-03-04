@@ -1,6 +1,6 @@
 """
 Problem: Jump Game
-Difficulty: Easy
+Difficulty: Medium
 URL: https://leetcode.com/problems/jump-game/
 
 Time Complexity: O(n)
