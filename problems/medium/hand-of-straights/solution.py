@@ -3,11 +3,8 @@ Problem: Hand of Straights
 Difficulty: Medium
 URL: https://leetcode.com/problems/hand-of-straights/
 
-Time Complexity: O(nlogn + m*k)
+Time Complexity: O(mlogm) where m = number of unique cards
 Space Complexity: O(m)
-- where n = number of cards
-        m = number of unique cards
-        k = groupSize
 """
 
 from collections import Counter
@@ -16,21 +13,16 @@ from typing import List
 
 class Solution:
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize:
+            return False
+
         count = Counter(hand)
-        cards = sorted(count.keys())
 
-        for i in range(len(cards)):
-            currCount = count[cards[i]]
-            del count[cards[i]]
-            if currCount == 0:
-                continue
+        for card in sorted(count):
+            if count[card]:
+                for i in range(card + 1, card + groupSize):
+                    if not count[i] or count[i] < count[card]:
+                        return False
+                    count[i] -= count[card]
 
-            if i + groupSize > len(cards):
-                return False
-
-            for j in range(i + 1, i + groupSize):
-                if cards[j - 1] + 1 != cards[j] or count[cards[j]] < currCount:
-                    return False
-                count[cards[j]] -= currCount
-
-        return len(count) == 0
+        return True
