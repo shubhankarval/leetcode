@@ -17,7 +17,7 @@ from typing import List
 class Solution:
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
         count = Counter(hand)
-        cards = sorted(Counter.keys())
+        cards = sorted(count.keys())
 
         for i in range(len(cards)):
             currCount = count[cards[i]]
