@@ -3,44 +3,34 @@ Problem: Hand of Straights
 Difficulty: Medium
 URL: https://leetcode.com/problems/hand-of-straights/
 
-Time Complexity: O(n²)
-Space Complexity: O(n)
+Time Complexity: O(nlogn + m*k)
+Space Complexity: O(m)
+- where n = number of cards
+        m = number of unique cards
+        k = groupSize
 """
 
-from collections import deque
+from collections import Counter
 from typing import List
 
 
 class Solution:
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
-        hand.sort()
-        queue = deque([0])
-        visited = set()
+        count = Counter(hand)
+        cards = sorted(Counter.keys())
 
-        while queue:
-            start = end = queue.popleft()
-            visited.add(start)
-            prev = hand[start]
-            size = 1
+        for i in range(len(cards)):
+            currCount = count[cards[i]]
+            del count[cards[i]]
+            if currCount == 0:
+                continue
 
-            for i in range(start + 1, len(hand)):
-                if size == groupSize:
-                    break
-                if i not in visited:
-                    if prev == hand[i]:
-                        if not queue:
-                            queue.append(i)
-                    elif prev + 1 != hand[i]:
-                        return False
-                    else:
-                        visited.add(i)
-                        prev = hand[i]
-                        size += 1
-                end = i
-
-            if size != groupSize:
+            if i + groupSize > len(cards):
                 return False
-            if not queue and end != len(hand) - 1:
-                queue.append(end + 1)
 
-        return True
+            for j in range(i + 1, i + groupSize):
+                if cards[j - 1] + 1 != cards[j] or count[cards[j]] < currCount:
+                    return False
+                count[cards[j]] -= currCount
+
+        return len(count) == 0
