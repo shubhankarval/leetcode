@@ -3,38 +3,57 @@ Problem: Min Cost to Connect Points
 Difficulty: Medium
 URL: https://leetcode.com/problems/min-cost-to-connect-all-points/
 
-Time Complexity: O(n²logn)
-Space Complexity: O(n²)
+Time Complexity: O(n²)
+Space Complexity: O(n)
 """
 
 from typing import List
-from collections import defaultdict
 import heapq
 
 
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
-        adjList = defaultdict(list)
-        for i, (x1, y1) in enumerate(points):
-            for j in range(i + 1, len(points)):
-                x2, y2 = points[j]
-                dist = abs(x1 - x2) + abs(y1 - y2)
-                adjList[i].append([dist, j])
-                adjList[j].append([dist, i])
+        n, cost = len(points), 0
+        dist, visited = [float("inf")] * n, [False] * n
+        dist[0] = 0
 
+        for _ in range(n):
+            # Select: Find the node with the smallest distance to the MST
+            u = min((i for i in range(n) if not visited[i]), key=lambda i: dist[i])
+
+            cost += dist[u]
+            visited[u] = True
+            ux, uy = points[u]
+
+            # Update: Refresh distances from the new node to its neighbors
+            for v in range(n):
+                if not visited[v]:
+                    vx, vy = points[v]
+                    new_dist = abs(ux - vx) + abs(uy - vy)
+                    if new_dist < dist[v]:
+                        dist[v] = new_dist
+
+        return cost
+
+    # Alternative Prim's algorithm (Time Complexity: O(n² log n), Space Complexity: O(n))
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        n = len(points)
         cost = 0
         minHeap = [[0, 0]]
         visited = set()
 
-        while len(visited) < len(points):
+        while len(visited) < n:
             dist, i = heapq.heappop(minHeap)
             if i in visited:
                 continue
             cost += dist
             visited.add(i)
+            xi, yi = points[i]
 
-            for neiDist, nei in adjList[i]:
-                if nei not in visited:
-                    heapq.heappush(minHeap, [neiDist, nei])
+            for j in range(n):
+                if j not in visited:
+                    xj, yj = points[j]
+                    neiDist = abs(xi - xj) + abs(yi - yj)
+                    heapq.heappush(minHeap, [neiDist, j])
 
         return cost
