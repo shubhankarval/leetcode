@@ -3,10 +3,10 @@ Problem: Coin Change II
 Difficulty: Medium
 URL: https://leetcode.com/problems/coin-change-ii/
 
-Time Complexity: O(n^(A / min_coin))
-Space Complexity: O(A)
-- where A = amount
-        n = no. of coins
+Time Complexity: O(n² * a)
+Space Complexity: O(n * a)
+- where n = no. of coins
+        a = amount
 """
 
 from typing import List
@@ -14,18 +14,19 @@ from typing import List
 
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
-        if amount == 0:
-            return 1
-        cnt = 0
+        n = len(coins)
+        dp = [[-1] * n for _ in range(amount)]
 
-        def dfs(i, amt):
-            nonlocal cnt
-            for j in range(i, len(coins)):
-                newAmt = amt + coins[j]
-                if newAmt == amount:
-                    cnt += 1
-                elif newAmt < amount:
-                    dfs(j, newAmt)
+        def dfs(amt, i):
+            if amt > amount:
+                return 0
+            if amt == amount:
+                return 1
+            if dp[amt][i] == -1:
+                cnt = 0
+                for j in range(i, n):
+                    cnt += dfs(amt + coins[j], j)
+                dp[amt][i] = cnt
+            return dp[amt][i]
 
-        dfs(0, 0)
-        return cnt
+        return dfs(0, 0)
