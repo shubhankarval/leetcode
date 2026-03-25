@@ -15,14 +15,9 @@ class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         rows, cols = len(matrix), len(matrix[0])
         memo = [[-1] * cols for _ in range(rows)]
-        visited = [[0] * cols for _ in range(rows)]
         dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
         def dfs(r, c):
-            if visited[r][c]:
-                return 0
-            visited[r][c] = 1
-
             if memo[r][c] == -1:
                 res = 1
                 for dr, dc in dirs:
@@ -35,7 +30,6 @@ class Solution:
                         res = max(res, 1 + dfs(nr, nc))
                 memo[r][c] = res
 
-            visited[r][c] = 0
             return memo[r][c]
 
         for r in range(rows):
