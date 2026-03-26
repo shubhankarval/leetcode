@@ -8,6 +8,7 @@ Space Complexity: O(m * n)
 - where m and n are the number of rows and columns in the matrix, respectively.
 """
 
+from collections import deque
 from typing import List
 
 
@@ -37,3 +38,35 @@ class Solution:
                 dfs(r, c)
 
         return max(max(row) for row in memo)
+
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        rows, cols = len(matrix), len(matrix[0])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        inDeg = [[0] * cols for _ in range(rows)]
+        queue = deque()
+        maxL = 0
+
+        for r in range(rows):
+            for c in range(cols):
+                for dr, dc in dirs:
+                    nr, nc = r + dr, c + dc
+                    if (
+                        0 <= nr < rows
+                        and 0 <= nc < cols
+                        and matrix[nr][nc] < matrix[r][c]
+                    ):
+                        inDeg[r][c] += 1
+                if inDeg[r][c] == 0:
+                    queue.append([r, c, 1])
+
+        while queue:
+            r, c, l = queue.popleft()
+            maxL = max(l, maxL)
+            for dr, dc in dirs:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] > matrix[r][c]:
+                    inDeg[nr][nc] -= 1
+                    if inDeg[nr][nc] == 0:
+                        queue.append([nr, nc, l + 1])
+
+        return maxL
