@@ -5,8 +5,7 @@ URL: https://leetcode.com/problems/regular-expression-matching/
 
 Time Complexity: O(m * n)
 Space Complexity: O(m * n)
-- where m = len(s)
-        n = len(p)
+- where m = len(s) and n = len(p)
 """
 
 
@@ -22,23 +21,15 @@ class Solution:
             if dp[i][j] == None:
                 ans = False
 
-                if i == m:
-                    if p[j] == "*":
-                        ans = dfs(i, j + 1)
-                    elif j + 1 < n and p[j + 1] == "*":
-                        ans = dfs(i, j + 2)
-
+                if p[j] == "*":
+                    ans = dfs(i, j + 1)
+                    if not ans and i < m and (p[j - 1] == "." or s[i] == p[j - 1]):
+                        ans = dfs(i + 1, j)
                 else:
-                    if p[j] == "*":
-                        if p[j - 1] == "." or s[i] == p[j - 1]:
-                            ans = dfs(i + 1, j)
-                        ans = ans or dfs(i, j + 1)
-                    elif s[i] == p[j] or p[j] == ".":
-                        ans = dfs(i + 1, j + 1)
-                        if not ans and j + 1 < n and p[j + 1] == "*":
-                            ans = dfs(i, j + 1)
-                    elif j + 1 < n and p[j + 1] == "*":
+                    if j + 1 < n and p[j + 1] == "*":
                         ans = dfs(i, j + 2)
+                    if not ans and i < m and (s[i] == p[j] or p[j] == "."):
+                        ans = dfs(i + 1, j + 1)
 
                 dp[i][j] = ans
 
